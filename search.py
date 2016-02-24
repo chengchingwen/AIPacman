@@ -176,7 +176,7 @@ def uniformCostSearch(problem):
     visit =  []
     action = []
 
-    """((point,way,cost,path),Next,totalcost )"""
+
     while not problem.isGoalState(current):
 
         k=q.pop()
@@ -208,9 +208,6 @@ def uniformCostSearch(problem):
 
 
 
-    #print "Start:", problem.getStartState()
-    #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    #print "Start's successors:", problem.getSuccessors((5,4))
 
 def nullHeuristic(state, problem=None):
     """
@@ -222,7 +219,32 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    q=util.PriorityQueue()
+    state=problem.getStartState()
+    q.push(((state, []), 0) ,0+heuristic(state, problem))
+    cost = 0
+    current = state
+    state =  []
+    visit =  []
+    action = []
+    while not problem.isGoalState(current):
+        k=q.pop()
+        current=k[0][0]
+        if current in visit:
+            continue
+        visit.append(current)
+        state=k[0][-1]
+        if problem.isGoalState(current):
+            action=state
+            break
+        Next=[i for i in problem.getSuccessors(current) if i[0] not in visit]
+        cost = k[-1]
+
+
+        for i in Next:
+            q.push((i+(state+[i[1]],) ,cost+i[-1]-heuristic(current,problem)+heuristic(i[0],problem)), cost+i[-1]-heuristic(current,problem)+heuristic(i[0],problem))
+
+    return action
 
 
 # Abbreviations
