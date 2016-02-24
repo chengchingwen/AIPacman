@@ -169,43 +169,35 @@ def uniformCostSearch(problem):
     "*** YOUR CODE HERE ***"
     q=util.PriorityQueue()
     state=problem.getStartState()
-    q.push(((state, []),problem.getSuccessors(state), 0) ,0)
+    q.push(((state, []), 0) ,0)
     cost = 0
     current = state
     state =  []
     visit =  []
     action = []
-    a=raw_input()
+
     """((point,way,cost,path),Next,totalcost )"""
     while not problem.isGoalState(current):
-        if a=="1":
-            print "q:"
-            for i in q.heap:
-                print "ss:", i[2][0]
-                print "Next:", i[2][1]
-                #print "totalcost:", i[2][2]
+
         k=q.pop()
         current=k[0][0]
-        print current
+        #print current
         if current in visit:
             continue
         visit.append(current)
         state=k[0][-1]
-        Next=k[-2]
-        cost = k[-1]
+        #Next=k[-2]
         if problem.isGoalState(current):
             #print state
             action=state
             break
-        print Next
-        Next=[i for i in Next if i[0] not in visit]
-        if a=="1":
-            print "next:", Next
-            print "visit:", visit
-            raw_input()
+        Next=[i for i in problem.getSuccessors(current) if i[0] not in visit]
+        cost = k[-1]
+
+
         for i in Next:
             #print "i:", i
-            q.push((i+(state+[i[1]],),problem.getSuccessors(i[0]) ,cost+i[-1]), cost+i[-1])
+            q.push((i+(state+[i[1]],) ,cost+i[-1]), cost+i[-1])
 
             #visit.append(i[0])
 
