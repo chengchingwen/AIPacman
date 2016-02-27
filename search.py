@@ -96,7 +96,7 @@ def depthFirstSearch(problem):
     s.push((current , q))
     visit=[problem.getStartState()]
 
-    while not problem.isGoalState(current):
+    while not s.isEmpty():
         #print s.list
         current, Next=s.pop()
         Next=[i[:2] for i in Next if i[0] not in visit]
@@ -132,36 +132,40 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    x=[]
+    start=problem.getStartState()
+    while not problem.isGoalState(start):
+        q=util.Queue()
+        q.push((start, []))
+        visit =  [start]
+        action = []
+        while not q.isEmpty():
+            #print "q:", q.list
+            k=q.pop()
+            current=k[0]
+            path=k[-1]
+            if problem.isGoalState(current):
+                #print state
+                start=current
+                x.append(path)
+                break
+            Next=[i[:2] for i in problem.getSuccessors(current) if i[0] not in visit]
+            #print "next:", Next
+            #raw_input()
+            for i in Next:
+                #print "i:", i
+                q.push(i+(path+[i[1]],))
 
-    q=util.Queue()
-    state=problem.getStartState()
-    q.push((state, []))
-    current = state
-    state =  []
-    visit =  [problem.getStartState()]
-    action = []
-    while not problem.isGoalState(current):
-        #print "q:", q.list
-        k=q.pop()
-        current=k[0]
-        state=k[-1]
-        if problem.isGoalState(current):
-            #print state
-            action=state
-            break
-        Next=[i[:2] for i in problem.getSuccessors(current) if i[0] not in visit]
-        #print "next:", Next
-        #raw_input()
-        for i in Next:
-            #print "i:", i
-            q.push(i+(state+[i[1]],))
-
-            visit.append(i[0])
-        #print "curreent:", current
-        #print "state:", state
-
-
+                visit.append(i[0])
+            #print "curreent:", current
+            #print "state:", state
+        #print action
+    for i in x:
+        for j in i:
+            action.append(j)
+    #print problem.getStartState()
     #print action
+
     return action
 
 def uniformCostSearch(problem):
@@ -177,7 +181,7 @@ def uniformCostSearch(problem):
     action = []
 
 
-    while not problem.isGoalState(current):
+    while not q.isEmpty():
 
         k=q.pop()
         current=k[0][0]
@@ -227,7 +231,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     state =  []
     visit =  []
     action = []
-    while not problem.isGoalState(current):
+    while not q.isEmpty():
         k=q.pop()
         current=k[0][0]
         if current in visit:
